@@ -41,3 +41,10 @@ To run the exploit, first cold boot your Vita, then navigate to `exploit.html`. 
 * you get a "trigger" alert(), then nothing happens: the exploit succeeded
 * you get a "trigger" alert(), then the browser crashes: the exploit failed, retry it a few times, then reboot the Vita and try again
 * you get a "trigger" alert(), then the system crashes: that shouldn't happen, try the exploit again
+
+using python webserver on the output/web directory:
+
+* cd output/web
+* python3 -m http.server 8086
+
+it does not work. Webpage http://(hostip):8086/exploit.html just says: restart the browser 
