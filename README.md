@@ -10,11 +10,12 @@ WSL2 support. You will need:
 All tools should be in your PATH.
 
 Copy sample.config.in as my.config.in and edit my.config.in, then pass it into build.sh
+
 Run `sudo -E ./build.sh my.config.in` to build everything. This script first cleans up all build directories and then builds the exploit.
 
 # Develop
 
-I needed to fork this because the original doesn't build at all and has errors in WSL2, so the changes here pertain only to WSL2. Changes include settings and config files and source files in bootstrap.c
+I needed to fork this because the original doesn't build at all and has errors in WSL2, so the changes here pertain only to WSL2. Changes include settings and config files and source files in bootstrap.c and kernel.c
 
 It's useful to have everything be automatically rebuilt when a source file changes. To achieve that, install `entr` and execute in a separate terminal:
 

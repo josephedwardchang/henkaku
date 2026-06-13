@@ -27,14 +27,14 @@ fi
 
 set -e
 
-CC=arm-vita-eabi-gcc
-LD=arm-vita-eabi-gcc
-AS=arm-vita-eabi-as
-OBJCOPY=arm-vita-eabi-objcopy
+CC=/usr/local/vitasdk/bin/arm-vita-eabi-gcc
+LD=/usr/local/vitasdk/bin/arm-vita-eabi-gcc
+AS=/usr/local/vitasdk/bin/arm-vita-eabi-as
+OBJCOPY=/usr/local/vitasdk/bin/arm-vita-eabi-objcopy
 LDFLAGS="-T payload/linker.x -nodefaultlibs -nostdlib -pie"
 DEFINES="-DRELEASE=$RELEASE"
 PREPROCESS="$CC -E -P -C -w -x c $DEFINES"
-CFLAGS="-fPIE -fno-zero-initialized-in-bss -std=c99 -mcpu=cortex-a9 -Os -mthumb $DEFINES"
+CFLAGS="-ffreestanding -fno-tree-loop-distribute-patterns -fPIE -fno-zero-initialized-in-bss -std=c99 -mcpu=cortex-a9 -Os -mthumb $DEFINES"
 
 # generate version stuffs
 BUILD_VERSION=$(git describe --dirty --always --tags)
@@ -101,7 +101,7 @@ dd of=build/loader.256 if=build/loader.full bs=256 count=1 conv=notrunc
 openssl enc -aes-256-ecb -in build/loader.256 -nopad -out build/loader.enc -K BD00BF08B543681B6B984708BD00BF0023036018467047D0F8A03043F69D1130
 
 echo "3) Kernel ROP"
-./krop/build_rop.py krop/rop.S build/
+PATH="/usr/local/vitasdk/bin:$PATH" python3 ./krop/build_rop.py krop/rop.S build/
 
 echo "4) User ROP"
 echo "symbol stage2_url_base = \"$HENKAKU_BIN_URL\";" > build/config.rop

@@ -334,7 +334,7 @@ int install_pkg(const char *pkg_url_prefix) {
 	char file_name[0x400];
 	char url[0x400];
 
-	LOG("package url prefix: %s\n", pkg_url_prefix);
+	LOG("package url prefix: %x\n", pkg_url_prefix);
 
 	// this is to get random directory
 	sceClibSnprintf(pkg_path, sizeof(pkg_path), "ux0:ptmp/%x", (((unsigned)&install_pkg) >> 4) * 12347);
@@ -627,7 +627,7 @@ static int load_paf() {
 	ptr[0] = 0;
 	ptr[1] = (unsigned)&ptr[0];
 	unsigned scepaf_argp[] = {0x400000, 0xEA60, 0x40000, 0, 0};
-	return sceSysmoduleLoadModuleInternalWithArg(SCE_SYSMODULE_INTERNAL_PAF, sizeof(scepaf_argp), scepaf_argp, (void *)ptr);
+	return sceSysmoduleLoadModuleInternalWithArg(SCE_SYSMODULE_INTERNAL_PAF, sizeof(scepaf_argp), scepaf_argp, ptr);
 }
 
 static void init_modules() {
@@ -653,7 +653,7 @@ static void init_modules() {
 	int block = sceKernelAllocMemBlock("net", SCE_KERNEL_MEMBLOCK_TYPE_USER_RW, 1*1024*1024, NULL);
 	LOG("block: 0x%x\n", block);
 	ret = sceKernelGetMemBlockBase(block, &base);
-	LOG("sceKernelGetMemBlockBase: 0x%x base 0x%x\n", ret, &base);
+	LOG("sceKernelGetMemBlockBase: 0x%x base 0x%x\n", ret, base);
 
 	netInitParam.memory = base;
 	netInitParam.size = 1*1024*1024;
@@ -697,7 +697,7 @@ int module_start(SceSize argc, const void *args) {
 	int block = sceKernelAllocMemBlock("display", SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW, FRAMEBUFFER_SIZE, NULL);
 	LOG("block: 0x%x\n", block);
 	ret = sceKernelGetMemBlockBase(block, &cui_data.base);
-	LOG("sceKernelGetMemBlockBase: 0x%x base 0x%x\n", ret, &cui_data.base);
+	LOG("sceKernelGetMemBlockBase: 0x%x base 0x%x\n", ret, cui_data.base);
 
 	// draw logo
 	clear_screen();
@@ -848,7 +848,7 @@ int module_start(SceSize argc, const void *args) {
 		cui_data.fg_color = 0xFF00FF00;
 		DRAWF("HENkaku was successfully installed\n");
 		cui_data.fg_color = 0xFFFFFFFF;
-		DRAWF("(the application will close automatically in 3s)\n");
+		DRAWF("(the application will close automatically in 3s)\n", 3);
 		sceKernelDelayThread((ret < 0 ? 10 : 3) * 1000 * 1000);
 	}
 
